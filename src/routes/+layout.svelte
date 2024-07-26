@@ -36,8 +36,19 @@
 	model.compile({ optimizer: 'sgd', loss: 'meanAbsoluteError' });
 	console.log('layer');
 	(async () => {
-		await model.fit(trainTensor.sizeMB, trainTensor.timeSec, { epochs: 10 }); //fit == 훈련
-		console.log('fit');
+		await model.fit(trainTensor.sizeMB, trainTensor.timeSec, { epochs: 200 }); //fit == 훈련
+		console.log('손실함수');
+
 		model.evaluate(testTensor.sizeMB, testTensor.timeSec).print(); // 손실함수 계산
+
+		const avgDealySec = tf.mean(trainTensor.timeSec);
+		console.log('훈련데이터 평균');
+		avgDealySec.print(); // 평균을 구해본다
+
+		console.log('테스트 데이터 평균');
+		testTensor.timeSec.sub(0.295).abs().mean().print();
+
+		console.log('prediect');
+		model.predict(tf.tensor2d([[1], [100]])).print();
 	})();
 </script>
